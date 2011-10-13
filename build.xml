@@ -1,0 +1,74 @@
+<project name="InboxAttackRobot" default="play" basedir=".">
+
+  <property name="base" location="." />
+  <property name="src" location="src" />
+  <property name="bin" location="bin" />
+  <property name="url" value="file://localhost${base}/inbox-attack.svg" />
+
+  <!-- Get version from Git, and output it to the VERSION file.
+       This file is later copied to other locations. -->
+  <exec executable="git" outputproperty="version" failifexecutionfails="false">
+    <arg value="describe" />
+    <arg value="--dirty" />
+  </exec>
+  <!-- If we can't get the version from Git, set a default -->
+  <property name="version" value="UNKNOWN-VERSION" />
+  <echo message="${version}" file="VERSION" />
+
+  <property name="jar.filename" value="inbox-attack-robot-${version}.jar" />
+  <property name="jar.path" value="pkg/${jar.filename}" />
+
+  <path id="inboxattack.classpath">
+    <pathelement location="bin" />
+    <fileset dir="lib" includes"**/*.jar" />
+  </path>
+
+  <!-- Targets -->
+
+  <!-- Delete the bin and pkg dirs, &c. -->
+  <target name="clean" description="Delete all generated files">
+    <delete dir="bin" />
+    <delete>
+      <fileset dir="." includes="**/*.class" />
+      <fileset dir="." includes="**/test_apc.txt" />
+    </delete>
+    <delete dir="pkg" />
+    <delete dir="doc" />
+    <delete dir="release" />
+    <delete dir="probedata" />
+  </target>
+
+  <!-- Compile all classes after cleaning -->
+  <target name="compile" description="Compile all the source files">
+    <fileset dir="bin" />
+    <mkdir dir="bin" />
+    <copy file="VERSION" todir="bin" />
+
+    <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">
+      <src path="src" />
+      <classpath refid="classpath.path" />
+    </javac>
+  </target>
+
+  <!-- Build the jar -->
+  <target name="jar" description="Make a JAR file" depends="compile">
+    <mkdir dir="pkg" />
+
+    <jar destfile="${jar.path}">
+      <fileset dir="bin" includes="**/*.class" />
+      <fileset file="VERSION" />
+      <manifest>
+        <attribute name="Main-Class" value="com.opera.core.systems.inboxattack.InboxAttackRobot" />
+        <attribute name="Implementation-Version" value="${version}" />
+      </manifest>
+    </jar>
+  </target>
+
+  <!-- Run the example -->
+  <target name="run" description="Run the Inbox Attack robot demo" depends="jar">
+    <java classname="InboxAttackRobot" classpathref="inboxattack.classpath" classpath="${bin}">
+      <arg value="--url=${url}" />
+    </java>
+  </target>
+
+</project>
