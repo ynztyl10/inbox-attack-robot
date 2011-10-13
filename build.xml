@@ -19,8 +19,7 @@
   <property name="jar.path" value="pkg/${jar.filename}" />
 
   <path id="inboxattack.classpath">
-    <pathelement location="bin" />
-    <fileset dir="lib" includes"**/*.jar" />
+    <fileset dir="lib" includes="**/*.jar" />
   </path>
 
   <!-- Targets -->
@@ -46,7 +45,7 @@
 
     <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">
       <src path="src" />
-      <classpath refid="classpath.path" />
+      <classpath refid="inboxattack.classpath" />
     </javac>
   </target>
 
@@ -65,8 +64,9 @@
   </target>
 
   <!-- Run the example -->
-  <target name="run" description="Run the Inbox Attack robot demo" depends="jar">
-    <java classname="InboxAttackRobot" classpathref="inboxattack.classpath" classpath="${bin}">
+  <target name="run" description="Run the Inbox Attack robot demo" depends="compile">
+    <echo message="${bin}" />
+    <java classname="com.opera.core.systems.inboxattack.InboxAttackRobot" classpathref="inboxattack.classpath" classpath="${bin}">
       <arg value="--url=${url}" />
     </java>
   </target>
