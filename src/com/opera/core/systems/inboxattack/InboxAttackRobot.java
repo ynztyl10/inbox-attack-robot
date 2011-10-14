@@ -114,7 +114,7 @@ public class InboxAttackRobot {
       int distanceFromTarget = game.player().distanceFromTarget(mail.getChannel());
 
       // Move player right or left the needed times
-      System.out.println("  moving player");
+      logger.fine("  moving player");
       for (int i = 0; i < Math.abs(distanceFromTarget); i++) {
         if (distanceFromTarget > 0) {
           game.control().right();
