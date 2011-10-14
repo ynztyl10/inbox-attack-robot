@@ -56,7 +56,7 @@ public class ScoreBoard {
   }
 
   private void newHighScore(int score) {
-    System.out.println("New high score: " + Integer.toString(score));
+    InboxAttackRobot.out.println("New high score: " + Integer.toString(score));
   }
 
 }

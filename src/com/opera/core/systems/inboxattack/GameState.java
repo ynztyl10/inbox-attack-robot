@@ -9,7 +9,7 @@ public class GameState {
   private InboxAttack game;
 
   public GameState(InboxAttack game) {
-    this.game   = game;
+    this.game = game;
   }
 
   public boolean isWaiting() {

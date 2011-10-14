@@ -11,15 +11,11 @@ public class Mail {
   private int id;
   private int channel = -1;
   private int state = UNKNOWN;
-  private InboxAttack game;
 
   public Mail(HashMap<String, Long> newMail, InboxAttack game) {
     this.id = new Integer(newMail.get("id").toString());
     this.channel = new Integer(newMail.get("channel").toString());
     this.state = new Integer(newMail.get("state").toString());
-    this.game = game;
-
-    //System.out.println("Mail() id=" + id + ", channel=" + channel + ", state=" + state);
   }
 
   public int getId() {
@@ -43,21 +39,7 @@ public class Mail {
   }
 
   public int getState() {
-
-    /*
-        List<Mail> inbox = new ArrayList<Mail>();
-    ArrayList<HashMap> mails = (ArrayList) game.get("inbox");
-
-    for (HashMap<String, Long> mail : mails) {
-      inbox.add(new Mail(mail, game));
-    }
-    */
-
     return this.state;
-
-
-    // TODO: WTF!
-    //return new Integer(game.get("state").toString());
   }
 
 }

@@ -3,29 +3,26 @@ package com.opera.core.systems.inboxattack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Inbox {
 
   private InboxAttack game;
   private List<Mail> inbox = new ArrayList<Mail>();
 
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
+
   public Inbox(InboxAttack game) {
     this.game = game;
   }
-
-  /*
-  public Mail getNextMail() {
-    update();
-    return inbox.get(inbox.size() - 1);
-  }
-  */
 
   public List<Mail> getPresentMail() {
     update();
     List<Mail> presentMail = new ArrayList<Mail>();
 
     for (Mail mail : inbox) {
-      System.out.println("parsing " + mail.getId() + " (channel " + mail.getChannel() + ", state: " + mail.getState() + ")");
+      logger.fine("parsing " + mail.getId() + " (channel " + mail.getChannel() + ", state: "
+                  + mail.getState() + ")");
       if (mail.isUnknown()) {
         presentMail.add(mail);
       }
@@ -71,16 +68,6 @@ public class Inbox {
     for (HashMap<String, Long> mail : inbox) {
       parsedMail.add(new Mail(mail, game));
     }
-
-
-    /*
-    List<Mail> inbox = new ArrayList<Mail>();
-    ArrayList<HashMap> mails = (ArrayList) game.get("inbox");
-
-    for (HashMap<String, Long> mail : mails) {
-      inbox.add(new Mail(mail, game));
-    }
-    */
 
     return parsedMail;
   }

@@ -8,11 +8,14 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class InboxAttack {
 
   public OperaDriver driver;
   public Map cache = null;
+
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
 
   private String url;
   private Wait<WebDriver> wait;
@@ -62,18 +65,7 @@ public class InboxAttack {
   }
 
   private Map get() {
-    /*
-    while (driver.executeScript("return debugData()") == null) {
-      try {
-        Thread.sleep(500);
-      } catch (InterruptedException e) {
-        // nothing
-      }
-    }
-    */
-
     new WebDriverWait(this.driver, 15).until(new GameReady());
-
     cache = (Map) driver.executeScript("return debugData()");
     return cache;
   }

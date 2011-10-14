@@ -10,6 +10,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.PrintStream;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * InboxAttackPilot plays the “Inbox Attack” game originally developed by Daniel Davis (Opera).
@@ -25,6 +28,7 @@ public class InboxAttackRobot {
   public static PrintStream out = System.out;
   public static PrintStream err = System.err;
 
+  private static final Logger logger = Logger.getLogger(InboxAttackRobot.class.getName());
   private static ScoreBoard scores = new ScoreBoard();
   private static boolean running = false;
   private static String url;
@@ -41,8 +45,19 @@ public class InboxAttackRobot {
       url = cli.getOptionValue("url");
     }
 
+    if (cli.hasOption("debug")) {
+      Level logLevel = Level.ALL;
+      Logger root = Logger.getLogger("");
+      root.setLevel(logLevel);
+
+      for (Handler h : root.getHandlers()) {
+        h.setLevel(logLevel);
+      }
+    }
+
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setCapability("opera.port", -1);
+    logger.config("OperaDriver capabilities: " + capabilities);
 
     driver = new OperaDriver(capabilities);
     driver.navigate().to(url);
@@ -53,9 +68,7 @@ public class InboxAttackRobot {
       play();
     }
 
-    // End
     gameOver();
-
     driver.quit();
   }
 
@@ -90,12 +103,12 @@ public class InboxAttackRobot {
   private static void catchMail() {
     //if (game.inbox().getPresentMailCount() == 0) {
     if (game.inbox().size() == 0) {
-      System.out.println("no present mail");
+      logger.fine("no present mail");
       return;
     }
 
     for (Mail mail : game.inbox().getPresentMail()) {
-      System.out.println("processing mail #" + mail.getId());
+      logger.fine("processing mail #" + mail.getId());
 
       // Calculate player's distance to target channel
       int distanceFromTarget = game.player().distanceFromTarget(mail.getChannel());
@@ -114,8 +127,8 @@ public class InboxAttackRobot {
       boolean wait = true;
       //while (mail.isUnknown()) {
       while (wait) {
-        System.out.println("  waiting...");
-        System.out.println("  " + mail.getState());
+        logger.fine("  waiting...");
+        logger.fine("  " + mail.getState());
 
         if (!game.inbox().getAllMail().get(mail.getId()).isUnknown()) {
           wait = false;
