@@ -64,7 +64,7 @@
   </target>
 
   <!-- Run the example -->
-  <target name="run" description="Run the Inbox Attack robot demo" depends="compile">
+  <target name="play" description="Run the Inbox Attack robot demo" depends="compile">
     <echo message="${bin}" />
     <java classname="com.opera.core.systems.inboxattack.InboxAttackRobot" classpathref="inboxattack.classpath" classpath="${bin}">
       <arg value="--url=${url}" />
